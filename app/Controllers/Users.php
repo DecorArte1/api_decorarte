@@ -13,11 +13,11 @@ class Users extends BaseController
         $userModel = new UserModel();
 
         $data = [
-            
+
             'email' => $this->request->getPost('email'),
             'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
-            
-            
+
+
         ];
 
         if ($userModel->insert($data)) {
@@ -38,18 +38,18 @@ class Users extends BaseController
     }
 
     public function index()
-{
-    $userModel = new UserModel();
-    $user = $userModel->findAll();
+    {
+        $userModel = new UserModel();
+        $user = $userModel->findAll();
 
-    $dataResult = [
-        "data" => $user,
-        "message" => 'Lista de usuarios',
-        "response" => ResponseInterface::HTTP_OK,
-    ];
+        $dataResult = [
+            "data" => $user,
+            "message" => 'Lista de usuarios',
+            "response" => ResponseInterface::HTTP_OK,
+        ];
 
-    return $this->response->setJSON($dataResult);
-}
+        return $this->response->setJSON($dataResult);
+    }
 
 
 
@@ -74,25 +74,17 @@ class Users extends BaseController
 
         return $this->response->setJSON($dataResult);
     }
-
     public function update($id)
 {
     $userModel = new UserModel();
-
-    // Obtener el usuario actual
     $user = $userModel->find($id);
 
-    // Verificar si el usuario existe
     if ($user) {
-        // Obtener los datos del formulario
         $data = [
-           
             'email' => $this->request->getVar('email') ?? $user['email'],
             'password' => $this->request->getVar('password') ? password_hash($this->request->getVar('password'), PASSWORD_DEFAULT) : $user['password'],
-            
         ];
 
-        // Actualizar el usuario en la base de datos
         if ($userModel->update($id, $data)) {
             $dataResult = [
                 "data" => $data,
@@ -117,40 +109,37 @@ class Users extends BaseController
     return $this->response->setJSON($dataResult);
 }
 
-public function delete($id)
-{
-    $userModel = new UserModel();
 
-    // Obtener el usuario actual
-    $user = $userModel->find($id);
 
-    // Verificar si el usuario existe
-    if ($user) {
-        // Eliminar el usuario de la base de datos
-        if ($userModel->delete($id)) {
-            $dataResult = [
-                "data" => $user,
-                "message" => 'Usuario eliminado correctamente',
-                "response" => ResponseInterface::HTTP_OK,
-            ];
+    public function delete($id)
+    {
+        $userModel = new UserModel();
+        $user = $userModel->find($id);
+    
+        if ($user) {
+            if ($userModel->delete($id)) {
+                $dataResult = [
+                    "data" => $user,
+                    "message" => 'Usuario eliminado',
+                    "response" => ResponseInterface::HTTP_OK,
+                ];
+            } else {
+                $dataResult = [
+                    "data" => '',
+                    "message" => 'Error al eliminar usuario',
+                    "response" => ResponseInterface::HTTP_INTERNAL_SERVER_ERROR,
+                ];
+            }
         } else {
             $dataResult = [
                 "data" => '',
-                "message" => 'Error al eliminar usuario',
-                "response" => ResponseInterface::HTTP_INTERNAL_SERVER_ERROR,
+                "message" => 'Usuario no encontrado',
+                "response" => ResponseInterface::HTTP_NOT_FOUND,
             ];
         }
-    } else {
-        $dataResult = [
-            "data" => '',
-            "message" => 'Usuario no encontrado',
-            "response" => ResponseInterface::HTTP_NOT_FOUND,
-        ];
+    
+        return $this->response->setJSON($dataResult);
     }
-
-    return $this->response->setJSON($dataResult);
-}
-
-
+    
 
 }

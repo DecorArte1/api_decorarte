@@ -13,13 +13,9 @@ $routes->group("api", function ($routes) {
     $routes->get("users", "Users::index", ['filter' => 'authFilter']);
     $routes->post('Users/create', 'Users::create');
     $routes->get('users/show/(:num)', 'Users::show/$1');
-    $routes->get("users", "Users::index");
-    
-    $routes->put('api/users/(:num)', 'Users::update/$1');
-
-
-    $routes->delete('api/users/(:num)', 'Users::delete/$1');
-
+    $routes->get("users", "Users::index"); 
+    $routes->put('users/update/(:num)', 'Users::update/$1');
+    $routes->delete('users/delete/(:num)', 'Users::delete/$1');
    
 });
 
