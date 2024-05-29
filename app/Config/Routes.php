@@ -34,12 +34,4 @@ $routes->group("api", function ($routes) {
     });
     
 
-    // Rutas de diseñadores
-    $routes->group("designers", function ($routes) {
-        $routes->get("/", "Designers::index", ['filter' => 'authFilter']);
-        $routes->post("create", "Designers::create");
-        $routes->get("show/(:num)", "Designers::show/$1");
-        $routes->put("update/(:num)", "Designers::update/$1");
-        $routes->delete("delete/(:num)", "Designers::delete/$1");
-    });
 });
